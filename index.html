@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GST Tax Invoice</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+  <!-- Header Section -->
+  <header class="bg-white p-6 shadow-md w-full">
+    <!-- Top Section: Company Info and Logo -->
+    <div class="flex flex-col lg:flex-row justify-between items-center mb-4">
+      <!-- Company Info -->
+      <div class="text-left w-full lg:w-2/3">
+        <h1 class="text-black text-3xl font-bold mb-2">Company Name</h1>
+        <p class="text-gray-600 mb-1">Company Address</p>
+        <p class="text-gray-600 mb-1">Mob No.: 1234567890</p>
+        <p class="text-gray-600 mb-1">E-mail: example@company.com</p>
+        <p class="text-gray-600">Website: www.companywebsite.com</p>
+      </div>
+      <!-- Company Logo -->
+      <div
+        class="bg-blue-100 border border-blue-400 rounded w-24 h-24 flex items-center justify-center lg:w-1/3 mt-4 lg:mt-0">
+        <span class="text-gray-700 text-sm font-semibold">Company Logo</span>
+      </div>
+    </div>
+
+    <!-- Center Section: Invoice Title -->
+    <div class="text-center mb-4">
+      <h2 class="text-black text-2xl font-bold">GST TAX INVOICE</h2>
+    </div>
+
+    <!-- GSTIN Details -->
+    <div class="flex flex-col lg:flex-row justify-between text-gray-600">
+      <p class="font-semibold mb-2 lg:mb-0">GSTIN:</p>
+      <p class="font-semibold">GST Identification Number:</p>
+    </div>
+  </header>
+
+  <section class="bg-white p-4 w-full mt-2">
+    <h2 class="text-blue-600 text-2xl font-bold mb-4 text-center">Customer Details</h2>
+    <form id="customer-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Name -->
+      <div>
+        <label for="name" class="block text-gray-700 font-semibold mb-1">Name:</label>
+        <input id="name" type="text"
+          class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200" />
+        <small id="name-error" class="text-red-500 text-sm hidden">Name is required!</small>
+      </div>
+      <!-- Mob No. -->
+      <div>
+        <label for="mob-no" class="block text-gray-700 font-semibold mb-1">Mob No.:</label>
+        <input id="mob-no" type="tel"
+          class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200" />
+        <small id="mob-error" class="text-red-500 text-sm hidden">Mobile number is required and must be 10 digits!</small>
+      </div>
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-gray-700 font-semibold mb-1">E-mail:</label>
+        <input id="email" type="email"
+          class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200" />
+        <small id="email-error" class="text-red-500 text-sm hidden">Valid email is required!</small>
+      </div>
+      <!-- Address -->
+      <div>
+        <label for="address" class="block text-gray-700 font-semibold mb-1">Address:</label>
+        <input id="address" type="text"
+          class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200" />
+        <small id="address-error" class="text-red-500 text-sm hidden">Address is required!</small>
+      </div>
+      <!-- Customer GSTIN -->
+      <div>
+        <label for="customer-gstin" class="block text-gray-700 font-semibold mb-1">Customer GSTIN:</label>
+        <input id="customer-gstin" type="text"
+          class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200" />
+        <small id="gstin-error" class="text-red-500 text-sm hidden">GSTIN is required!</small>
+      </div>
+      <!-- Invoice No. -->
+      <div>
+        <label for="invoice-no" class="block text-gray-700 font-semibold mb-1">Invoice No.:</label>
+        <input id="invoice-no" type="text"
+          class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200" />
+        <small id="invoice-error" class="text-red-500 text-sm hidden">Invoice number is required!</small>
+      </div>
+      <!-- Date -->
+      <div>
+        <label for="date" class="block text-gray-700 font-semibold mb-1">Date (DD/MM/YYYY):</label>
+        <input id="date" type="date"
+          class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200" />
+        <small id="date-error" class="text-red-500 text-sm hidden">Date is required!</small>
+      </div>
+      <!-- Place of Supply -->
+      <div>
+        <label for="place-of-supply" class="block text-gray-700 font-semibold mb-1">Place of Supply:</label>
+        <input id="place-of-supply" type="text"
+          class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200" />
+        <small id="place-error" class="text-red-500 text-sm hidden">Place of Supply is required!</small>
+      </div>
+      <!-- Submit Button -->
+      <div class="col-span-full">
+        <button type="submit"
+          class="w-full p-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-200">
+          Submit
+        </button>
+      </div>
+    </form>
+  </section>
+  
+  <script>
+    document.getElementById('customer-form').addEventListener('submit', (e) => {
+      e.preventDefault(); // Prevent form submission
+      let valid = true;
+  
+      // Validation logic
+      function validateField(fieldId, errorId, condition, errorMessage) {
+        const field = document.getElementById(fieldId);
+        const error = document.getElementById(errorId);
+  
+        if (!condition) {
+          valid = false;
+          error.textContent = errorMessage;
+          error.classList.remove('hidden');
+          field.classList.add('border-red-500');
+        } else {
+          error.classList.add('hidden');
+          field.classList.remove('border-red-500');
+        }
+      }
+  
+      validateField(
+        'name',
+        'name-error',
+        document.getElementById('name').value.trim() !== '',
+        'Name is required!'
+      );
+  
+      validateField(
+        'mob-no',
+        'mob-error',
+        /^[0-9]{10}$/.test(document.getElementById('mob-no').value.trim()),
+        'Mobile number must be 10 digits!'
+      );
+  
+      validateField(
+        'email',
+        'email-error',
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(document.getElementById('email').value.trim()),
+        'Please enter a valid email address!'
+      );
+  
+      validateField(
+        'address',
+        'address-error',
+        document.getElementById('address').value.trim() !== '',
+        'Address is required!'
+      );
+  
+      validateField(
+        'customer-gstin',
+        'gstin-error',
+        document.getElementById('customer-gstin').value.trim() !== '',
+        'GSTIN is required!'
+      );
+  
+      validateField(
+        'invoice-no',
+        'invoice-error',
+        document.getElementById('invoice-no').value.trim() !== '',
+        'Invoice number is required!'
+      );
+  
+      validateField(
+        'date',
+        'date-error',
+        document.getElementById('date').value.trim() !== '',
+        'Date is required!'
+      );
+  
+      validateField(
+        'place-of-supply',
+        'place-error',
+        document.getElementById('place-of-supply').value.trim() !== '',
+        'Place of Supply is required!'
+      );
+  
+      if (valid) {
+        // Collect data and submit if valid
+        const customerData = {
+          name: document.getElementById('name').value,
+          mobNo: document.getElementById('mob-no').value,
+          email: document.getElementById('email').value,
+          address: document.getElementById('address').value,
+          gstin: document.getElementById('customer-gstin').value,
+          invoiceNo: document.getElementById('invoice-no').value,
+          date: document.getElementById('date').value,
+          placeOfSupply: document.getElementById('place-of-supply').value,
+        };
+        console.log('Customer Data:', customerData); // Replace with actual submission logic
+        alert('Customer data submitted successfully!');
+      }
+    });
+  </script>
+  
+
+  <section class="bg-white p-4 w-full mt-2">
+    <h2 class="text-blue-600 text-2xl font-bold mb-4 text-center">Product/Service-wise Details</h2>
+    <div class="overflow-x-auto">
+      <table id="product-table" class="w-full border border-gray-300">
+        <thead>
+          <tr class="bg-blue-100">
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">Sr. No.</th>
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">Description</th>
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">HSN/SAC Code</th>
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">Qty</th>
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">Unit</th>
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">Rate</th>
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">Total Sale</th>
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border border-gray-300 p-2 text-gray-700">1</td>
+            <td class="border border-gray-300 p-2 text-gray-700"><input type="text" class="w-full border border-gray-300 rounded p-1" required /></td>
+            <td class="border border-gray-300 p-2 text-gray-700"><input type="text" class="w-full border border-gray-300 rounded p-1" required /></td>
+            <td class="border border-gray-300 p-2 text-gray-700"><input type="number" class="w-full border border-gray-300 rounded p-1 qty" required /></td>
+            <td class="border border-gray-300 p-2 text-gray-700"><input type="text" class="w-full border border-gray-300 rounded p-1" required /></td>
+            <td class="border border-gray-300 p-2 text-gray-700"><input type="number" class="w-full border border-gray-300 rounded p-1 rate" required /></td>
+            <td class="border border-gray-300 p-2 text-gray-700"><input type="number" class="w-full border border-gray-300 rounded p-1 total-sale" readonly /></td>
+            <td class="border border-gray-300 p-2 text-gray-700"><button type="button" class="bg-red-500 text-white p-1 rounded delete-row">Delete</button></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="bg-blue-100 font-bold">
+            <td colspan="6" class="border border-gray-300 text-gray-700 p-2 text-right">Grand Total:</td>
+            <td id="grand-total" class="border border-gray-300 text-gray-700 p-2">0</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="mt-4">
+      <button id="add-row" class="p-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700">Add Row</button>
+      <button id="submit-data" class="p-2 bg-green-600 text-white font-bold rounded hover:bg-green-700">Submit</button>
+    </div>
+  </section>
+  
+  <script>
+    // Update Total Sale and Grand Total
+    function updateTotals() {
+      const rows = document.querySelectorAll('#product-table tbody tr');
+      let grandTotal = 0;
+  
+      rows.forEach((row, index) => {
+        // Update Sr. No.
+        row.querySelector('td:first-child').textContent = index + 1;
+  
+        // Get qty and rate inputs
+        const qty = parseFloat(row.querySelector('.qty').value) || 0;
+        const rate = parseFloat(row.querySelector('.rate').value) || 0;
+  
+        // Calculate total sale
+        const totalSale = qty * rate;
+        row.querySelector('.total-sale').value = totalSale.toFixed(2);
+  
+        // Accumulate grand total
+        grandTotal += totalSale;
+      });
+  
+      // Update grand total
+      document.getElementById('grand-total').textContent = grandTotal.toFixed(2);
+    }
+  
+    // Add a new row
+    document.getElementById('add-row').addEventListener('click', () => {
+      const tableBody = document.querySelector('#product-table tbody');
+      const newRow = tableBody.rows[0].cloneNode(true);
+  
+      // Clear input values
+      newRow.querySelectorAll('input').forEach(input => input.value = '');
+      tableBody.appendChild(newRow);
+  
+      updateTotals(); // Update totals after adding a new row
+    });
+  
+    // Delete a row
+    document.querySelector('#product-table tbody').addEventListener('click', (e) => {
+      if (e.target.classList.contains('delete-row')) {
+        const row = e.target.closest('tr');
+        row.remove();
+        updateTotals(); // Update totals after deleting a row
+      }
+    });
+  
+    // Update totals dynamically on input change
+    document.getElementById('product-table').addEventListener('input', updateTotals);
+  
+    // Submit data
+    document.getElementById('submit-data').addEventListener('click', () => {
+      const rows = document.querySelectorAll('#product-table tbody tr');
+      const productData = [];
+  
+      let allValid = true;
+      rows.forEach(row => {
+        const description = row.querySelector('input[type="text"]').value.trim();
+        const hsnCode = row.querySelectorAll('input[type="text"]')[1].value.trim();
+        const qty = parseFloat(row.querySelector('.qty').value) || 0;
+        const rate = parseFloat(row.querySelector('.rate').value) || 0;
+  
+        if (!description || !hsnCode || qty <= 0 || rate <= 0) {
+          allValid = false; // Invalidate submission if any required field is empty or invalid
+        }
+  
+        productData.push({ description, hsnCode, qty, rate, totalSale: qty * rate });
+      });
+  
+      if (allValid) {
+        console.log('Product Data:', productData); // Replace with actual submission logic
+        alert('Product details submitted successfully!');
+      } else {
+        alert('Please fill out all required fields correctly!');
+      }
+    });
+  </script>
+  
+
+  
+  <section class="bg-white p-4 w-full mt-2">
+    <h2 class="text-blue-600 text-2xl font-bold mb-4 text-center">Tax Information</h2>
+  
+    <!-- Table for Tax Details -->
+    <div class="overflow-x-auto">
+      <table id="tax-table" class="w-full border border-gray-300">
+        <thead>
+          <tr class="bg-blue-100">
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">Sr. No.</th>
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">CGST Rate %</th>
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">CGST Amount</th>
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">SGST Rate %</th>
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">SGST Amount</th>
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">IGST Rate %</th>
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">IGST Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border border-gray-300 p-2 text-gray-700">1</td>
+            <td class="border border-gray-300 p-2 text-gray-700">
+              <input type="number" class="w-full border border-gray-300 rounded p-1 cgst-rate" required />
+            </td>
+            <td class="border border-gray-300 p-2 text-gray-700">
+              <input type="number" class="w-full border border-gray-300 rounded p-1 cgst-amount" readonly />
+            </td>
+            <td class="border border-gray-300 p-2 text-gray-700">
+              <input type="number" class="w-full border border-gray-300 rounded p-1 sgst-rate" required />
+            </td>
+            <td class="border border-gray-300 p-2 text-gray-700">
+              <input type="number" class="w-full border border-gray-300 rounded p-1 sgst-amount" readonly />
+            </td>
+            <td class="border border-gray-300 p-2 text-gray-700">
+              <input type="number" class="w-full border border-gray-300 rounded p-1 igst-rate" required />
+            </td>
+            <td class="border border-gray-300 p-2 text-gray-700">
+              <input type="number" class="w-full border border-gray-300 rounded p-1 igst-amount" readonly />
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="bg-blue-100 font-bold">
+            <td colspan="6" class="border border-gray-300 text-gray-700 p-2 text-right">Total GST Amount:</td>
+            <td id="total-gst" class="border border-gray-300 text-gray-700 p-2">0</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  
+    <!-- Amount in Words -->
+    <div class="mt-4">
+      <label for="amount-in-words" class="block text-gray-700 font-semibold mb-1">Amount in Words:</label>
+      <input id="amount-in-words" type="text" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200" />
+    </div>
+  
+    <!-- Remarks -->
+    <div class="mt-4">
+      <label for="remarks" class="block text-gray-700 font-semibold mb-1">Remarks:</label>
+      <textarea id="remarks" rows="4" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200"></textarea>
+      <p class="text-gray-600 text-sm mt-2">Note: Make all cheques payable to below-mentioned Name.</p>
+    </div>
+  
+    <!-- Submit Button -->
+    <div class="mt-6 text-center">
+      <button id="submit-tax-data" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-200">
+        Submit Tax Information
+      </button>
+    </div>
+  </section>
+  
+  <script>
+    let baseAmount = 0;
+  
+    // Dynamically update baseAmount from Product Table
+    document.getElementById('product-table').addEventListener('input', () => {
+      baseAmount = parseFloat(document.getElementById('grand-total')?.textContent) || 0;
+      calculateTaxAmounts(); // Trigger tax calculations when baseAmount changes
+    });
+  
+    // Calculate Tax Amounts and Total GST
+    function calculateTaxAmounts() {
+      const rows = document.querySelectorAll('#tax-table tbody tr');
+      let totalGST = 0;
+  
+      rows.forEach((row, index) => {
+        // Update Sr. No.
+        row.querySelector('td:first-child').textContent = index + 1;
+  
+        // Get rates
+        const cgstRate = parseFloat(row.querySelector('.cgst-rate').value) || 0;
+        const sgstRate = parseFloat(row.querySelector('.sgst-rate').value) || 0;
+        const igstRate = parseFloat(row.querySelector('.igst-rate').value) || 0;
+  
+        // Calculate amounts based on baseAmount
+        const cgstAmount = (baseAmount * cgstRate) / 100;
+        const sgstAmount = (baseAmount * sgstRate) / 100;
+        const igstAmount = (baseAmount * igstRate) / 100;
+  
+        row.querySelector('.cgst-amount').value = cgstAmount.toFixed(2);
+        row.querySelector('.sgst-amount').value = sgstAmount.toFixed(2);
+        row.querySelector('.igst-amount').value = igstAmount.toFixed(2);
+  
+        // Accumulate total GST
+        totalGST += cgstAmount + sgstAmount + igstAmount;
+      });
+  
+      // Update Total GST in the table footer
+      document.getElementById('total-gst').textContent = totalGST.toFixed(2);
+    }
+  
+    // Update GST calculations on Input Change
+    document.getElementById('tax-table').addEventListener('input', calculateTaxAmounts);
+  
+    // Submit Tax Information
+    document.getElementById('submit-tax-data').addEventListener('click', () => {
+      const rows = document.querySelectorAll('#tax-table tbody tr');
+      const taxData = [];
+      let allValid = true;
+  
+      rows.forEach(row => {
+        const cgstRate = parseFloat(row.querySelector('.cgst-rate').value) || 0;
+        const sgstRate = parseFloat(row.querySelector('.sgst-rate').value) || 0;
+        const igstRate = parseFloat(row.querySelector('.igst-rate').value) || 0;
+  
+        if (cgstRate <= 0 && sgstRate <= 0 && igstRate <= 0) {
+          allValid = false;
+        }
+  
+        taxData.push({
+          cgstRate,
+          sgstRate,
+          igstRate,
+          cgstAmount: (baseAmount * cgstRate) / 100,
+          sgstAmount: (baseAmount * sgstRate) / 100,
+          igstAmount: (baseAmount * igstRate) / 100,
+        });
+      });
+  
+      if (allValid) {
+        console.log('Tax Data:', taxData); // Replace with actual submission logic
+        alert('Tax details submitted successfully!');
+      } else {
+        alert('Please fill out all required fields correctly!');
+      }
+    });
+  </script>
+  
+  
+  
+  <section class="bg-white p-4 mt-2">
+    <h2 class="text-blue-600 text-2xl font-bold mb-4 text-center">Summary and Amount</h2>
+    <div class="overflow-x-auto">
+      <table id="summary-table" class="w-full border border-gray-300">
+        <thead>
+          <tr class="bg-blue-100">
+            <th class="border border-gray-300 text-gray-700 p-2 text-left">Description</th>
+            <th class="border border-gray-300 text-gray-700 p-2 text-right">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border border-gray-300 p-2 text-gray-700">Invoice Value</td>
+            <td id="invoice-value" class="border border-gray-300 p-2 text-gray-700 text-right">0</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 p-2 text-gray-700">Total CGST (1)</td>
+            <td id="total-cgst" class="border border-gray-300 p-2 text-gray-700 text-right">0</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 p-2 text-gray-700">Total SGST (2)</td>
+            <td id="total-sgst" class="border border-gray-300 p-2 text-gray-700 text-right">0</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 p-2 text-gray-700">Total IGST (3)</td>
+            <td id="total-igst" class="border border-gray-300 p-2 text-gray-700 text-right">0</td>
+          </tr>
+         
+          <tr class="bg-blue-100 font-bold">
+            <td class="border border-gray-300 p-2 text-gray-700 text-right">Grand Total (Rs)</td>
+            <td id="grand-total-summary" class="border border-gray-300 p-2 text-gray-700 text-right">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  
+  <script>
+    // Function to dynamically calculate Summary and Amount values
+    function calculateSummary() {
+      // Retrieve data from Product Details and Tax Information sections
+      const grandTotalFromProducts = parseFloat(document.getElementById('grand-total')?.textContent) || 0;
+      const totalCGST = parseFloat(document.getElementById('total-gst')?.textContent) || 0; // Correct ID for CGST
+      const totalSGST = parseFloat(document.getElementById('total-gst')?.textContent) || 0; // Correct ID for SGST
+      const totalIGST = parseFloat(document.getElementById('total-gst')?.textContent) || 0; // Correct ID for IGST
+  
+      // Calculate Total GST
+      const totalGST = totalCGST + totalSGST + totalIGST;
+  
+      // Calculate Grand Total (Invoice Value + Total GST)
+      const grandTotalSummary = grandTotalFromProducts + totalGST;
+  
+      // Update the Summary Table fields
+      document.getElementById('invoice-value').textContent = grandTotalFromProducts.toFixed(2);
+      document.getElementById('total-cgst').textContent = totalCGST.toFixed(2);
+      document.getElementById('total-sgst').textContent = totalSGST.toFixed(2);
+      document.getElementById('total-igst').textContent = totalIGST.toFixed(2);
+      document.getElementById('total-gst').textContent = totalGST.toFixed(2);
+      document.getElementById('grand-total-summary').textContent = grandTotalSummary.toFixed(2);
+    }
+  
+    // Listen for changes in Product and Tax sections
+    document.getElementById('product-table')?.addEventListener('input', calculateSummary);
+    document.getElementById('tax-table')?.addEventListener('input', calculateSummary);
+  </script>
+
+  <!-- bank  details -->
+  
+  <section class="bg-white p-4 mt-2">
+    <h2 class="text-blue-600 text-2xl font-bold mb-4 text-center">Bank Details</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div>
+        <label for="bank-name" class="text-gray-700 font-semibold">Name:</label>
+        <input id="bank-name" type="text" placeholder="Enter your name" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:ring-blue-200" required />
+      </div>
+      <div>
+        <label for="bank-name" class="text-gray-700 font-semibold">Bank Name:</label>
+        <input id="bank-name" type="text" placeholder="Enter your bank name" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:ring-blue-200" required />
+      </div>
+      <div>
+        <label for="account-number" class="text-gray-700 font-semibold">Account Number:</label>
+        <input id="account-number" type="text" placeholder="Enter account number" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:ring-blue-200" required />
+      </div>
+      <div>
+        <label for="branch-name" class="text-gray-700 font-semibold">Branch Name:</label>
+        <input id="branch-name" type="text" placeholder="Enter branch name" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:ring-blue-200" required />
+      </div>
+      <div>
+        <label for="ifsc-code" class="text-gray-700 font-semibold">IFSC Code:</label>
+        <input id="ifsc-code" type="text" placeholder="Enter IFSC code" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:ring-blue-200" required />
+      </div>
+    </div>
+  
+    <div class="mt-4 text-center">
+      <button id="submit-bank-details" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 focus:outline-none focus:ring focus:ring-green-200">
+        Submit Bank Details
+      </button>
+    </div>
+  </section>
+  
+  <script>
+    // Full Validation for Bank Details Section
+document.getElementById('submit-bank-details').addEventListener('click', () => {
+  // Retrieve inputs
+  const name = document.getElementById('bank-name').value.trim();
+  const bankName = document.getElementById('bank-name').value.trim();
+  const accountNumber = document.getElementById('account-number').value.trim();
+  const branchName = document.getElementById('branch-name').value.trim();
+  const ifscCode = document.getElementById('ifsc-code').value.trim();
+
+  // Validation checks
+  let isValid = true;
+  let errorMessage = '';
+
+  // Validate Name
+  if (name === '') {
+    errorMessage += 'Name is required.\n';
+    isValid = false;
+  }
+
+  // Validate Bank Name
+  if (bankName === '') {
+    errorMessage += 'Bank Name is required.\n';
+    isValid = false;
+  }
+
+  // Validate Account Number (numeric and length between 9-18 digits)
+  if (!/^\d{9,18}$/.test(accountNumber)) {
+    errorMessage += 'Account Number must be numeric and between 9-18 digits.\n';
+    isValid = false;
+  }
+
+  // Validate Branch Name
+  if (branchName === '') {
+    errorMessage += 'Branch Name is required.\n';
+    isValid = false;
+  }
+
+  // Validate IFSC Code (exactly 11 characters, alphanumeric)
+  if (!/^[A-Za-z0-9]{11}$/.test(ifscCode)) {
+    errorMessage += 'IFSC Code must be 11 characters and alphanumeric.\n';
+    isValid = false;
+  }
+
+  // Display validation results
+  if (isValid) {
+    alert('Bank details submitted successfully!');
+    console.log({
+      name,
+      bankName,
+      accountNumber,
+      branchName,
+      ifscCode,
+    }); // Replace with actual submission logic
+  } else {
+    alert(`Validation failed:\n${errorMessage}`);
+  }
+});
+
+  </script>
+  
+
+  <!-- Company Stamp, Thank You, and Authorized Signatory Section -->
+  <section class="bg-white p-4 mt-2">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+      <!-- Company Stamp -->
+      <div class="flex flex-col items-center">
+        <div class="bg-blue-100 border border-gray-300 rounded w-32 h-32 flex items-center justify-center">
+          <span class="text-gray-600 text-sm">Company Stamp</span>
+        </div>
+        <p class="text-gray-700 mt-2 text-center font-medium">Company Stamp</p>
+      </div>
+
+      <!-- Thank You Message -->
+      <div class="text-center">
+        <p class="text-blue-600 text-xl font-bold">Thank You!</p>
+        <p class="text-gray-600">Thank you for your business!</p>
+      </div>
+
+      <!-- Authorized Signatory -->
+      <div class="flex flex-col items-center">
+        <div class="bg-blue-100 border border-gray-300 rounded w-32 h-32 flex items-center justify-center">
+          <span class="text-gray-600 text-sm">Authorized Signatory</span>
+        </div>
+        <p class="text-gray-700 mt-2 text-center font-medium">Authorized Signatory</p>
+      </div>
+    </div>
+  </section>
+
+
+</body>
+
+</html>
